@@ -2,6 +2,10 @@ This module provides a function, `show_image`, which lets you render an image (w
 
 This requires `w3mimgdisplay` (this is usually available in package managers, e.g. `apt-get install w3m-img`).
 
+Installation:
+
+    pip install -U termimg
+
 Usage:
 
     from termimg import render_image
