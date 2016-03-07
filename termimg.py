@@ -2,6 +2,8 @@ from __future__ import division
 
 import os
 import curses
+import requests
+from hashlib import md5
 from subprocess import Popen, PIPE, check_output
 
 
@@ -25,6 +27,9 @@ def render_image(img_path, x=0, y=0, margin=0, scale_to_fit=True, keep_aspect=Tr
         x_offset: x offset, in pixels
         y_offset: y offset, in pixels
         bin: path to the `w3mimgdisplay` binary"""
+
+    if img_path.startswith('http'):
+        img_path = _fetch_remote_image(img_path)
 
     img_path = os.path.expanduser(img_path)
     img_width, img_height = _image_size(img_path, bin)
@@ -124,3 +129,17 @@ def _image_size(img_path, bin):
     out, err = ps.communicate(input='5;{}'.format(img_path))
     width, height = out.strip().split()
     return int(width), int(height)
+
+
+def _fetch_remote_image(url):
+    """fetches a remote image to a temporary file"""
+    req = requests.get(url, stream=True)
+    if req.status_code != 200:
+        req.raise_for_status()
+
+    fname = md5(url.encode('utf8')).hexdigest()
+    fpath = os.path.join('/tmp', fname)
+    with open(fpath, 'wb') as f:
+        for chunk in req:
+            f.write(chunk)
+    return fpath
