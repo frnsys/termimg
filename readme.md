@@ -9,6 +9,20 @@ Usage:
 
 This is all based on [research by z3bra](http://blog.z3bra.org/2014/01/images-in-terminal.html).
 
+Arguments to `render_image`:
+
+    img_path: path to image to display
+    x: x position, in pixels (top-left anchor)
+    y: y position, in pixels (top-left anchor)
+    margin: margin around image, in terminal rows/columns
+    scale_to_fit: scale image automatically to fit within available space (taking margins into account)
+    keep_aspect: maintain aspect ratio if only one of width or height is specified
+    width: width, in pixels, image should be rendered at
+    height: height, in pixels, image should be rendered at
+    x_offset: x offset, in pixels
+    y_offset: y offset, in pixels
+    bin: path to the `w3mimgdisplay` binary
+
 # Example
 
 ![`termimg` example](shot.png)
