@@ -1,4 +1,4 @@
-from __future__ import division
+from __future__ import division, unicode_literals
 
 import os
 import curses
@@ -80,11 +80,11 @@ def render_image(img_path, x=0, y=0, margin=0, scale_to_fit=True, keep_aspect=Tr
         source_width=img_width,
         source_height=img_height,
         img_path=img_path)
+    cmd = cmd.encode('utf-8')
 
     # pipe command to w3mimgdisplay to render the image
     ps = Popen(bin, stdin=PIPE, stdout=PIPE)
-    ps.stdin.write(cmd)
-    ps.stdin.flush()
+    ps.communicate(input=cmd)
 
     # place terminal cursor after the image
     # (or the last row of the image, if it takes up the full terminal)
@@ -126,7 +126,7 @@ def _tput(row, col):
 def _image_size(img_path, bin):
     """get the dimensions of an image, in pixels"""
     ps = Popen(bin, stdout=PIPE, stdin=PIPE)
-    out, err = ps.communicate(input='5;{}'.format(img_path))
+    out, err = ps.communicate(input='5;{}'.format(img_path).encode('utf-8'))
     width, height = out.strip().split()
     return int(width), int(height)
 
